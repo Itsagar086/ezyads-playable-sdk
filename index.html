@@ -73,7 +73,8 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       border-radius: 0px;
       border: none;
-      transition: all 0.3s ease;
+      /* Sprint 6: specific properties instead of transition:all */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
     @media (min-width: 481px) and (min-height: 855px) {
@@ -201,6 +202,7 @@
       background: #e2e8f0;
       border-radius: 4px;
       overflow: hidden;
+      position: relative; /* Sprint 6: merged from duplicate Sprint 5 rule */
     }
 
     .ai-energy-bar {
@@ -220,24 +222,21 @@
       white-space: nowrap;
     }
 
-    /* Sprint 5 — IQ progress shimmer overlay */
-    .ai-energy-wrapper {
-      position: relative;
-      overflow: hidden;
-    }
+    /* Sprint 5 — IQ progress shimmer (Sprint 6: uses transform, not left, to avoid reflow) */
     .ai-energy-wrapper::after {
       content: '';
       position: absolute;
-      top: 0; left: -60%;
+      top: 0; left: 0;
       width: 40%; height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
       border-radius: 4px;
       animation: energyShimmer 2.4s ease-in-out infinite;
       pointer-events: none;
+      will-change: transform;
     }
     @keyframes energyShimmer {
-      0%   { left: -60%; }
-      60%,100% { left: 130%; }
+      0%       { transform: translateX(-200%); }
+      60%,100% { transform: translateX(350%); }
     }
 
     /* --- IQ BRAIN ICON (inside .ai-dot) --- */
@@ -441,7 +440,8 @@
       align-items: center;
       padding: 12px;
       z-index: 8;
-      transition: all 0.3s ease;
+      /* Sprint 6: specific property instead of transition:all */
+      transition: background-color 0.3s ease;
       overflow: hidden;
       container-type: size;
     }
@@ -537,6 +537,17 @@
       color: transparent !important;
       pointer-events: none;
       z-index: 1;
+    }
+
+    /* Sprint 6 — Keyboard accessibility: restore focus ring for keyboard users only */
+    .grid-cell:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: -2px;
+      z-index: 11;
+    }
+    .cta-btn:focus-visible {
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
     }
 
     /* --- FLOATING TEXT / XP FX (Sprint 5 — Premium Polish) --- */
@@ -838,6 +849,10 @@
     #cta-overlay.active .secondary-cta {
       opacity: 0;
       animation: s5FadeUp 0.4s ease-out 0.55s forwards;
+    }
+    #cta-overlay.active .cta-btn {
+      opacity: 0;
+      animation: s5FadeUp 0.4s ease-out 0.48s forwards;
     }
 
     /* --- CTA DOWNLOAD BUTTON (Sprint 5 — breathing glow + hover scale) --- */
