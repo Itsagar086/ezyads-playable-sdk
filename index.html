@@ -212,9 +212,39 @@
     }
 
     .ai-emoji {
-      font-size: 16px;
-      transition: transform 0.2s ease;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      transition: color 0.3s ease;
+      white-space: nowrap;
     }
+
+    /* --- IQ BRAIN ICON (inside .ai-dot) --- */
+    .ai-dot svg {
+      width: 26px;
+      height: 26px;
+      display: block;
+      transition: filter 0.4s ease;
+    }
+    .ai-dot svg.iq-normal  { filter: none; }
+    .ai-dot svg.iq-bright  { filter: brightness(1.25); }
+    .ai-dot svg.iq-blue    { filter: brightness(1.3) drop-shadow(0 0 4px rgba(59,130,246,0.7)); }
+    .ai-dot svg.iq-gold    { filter: brightness(1.4) drop-shadow(0 0 5px rgba(255,170,0,0.85)); }
+    .ai-dot svg.iq-electric{ filter: brightness(1.6) drop-shadow(0 0 7px rgba(168,85,247,0.9)) drop-shadow(0 0 12px rgba(255,170,0,0.5)); }
+
+    @keyframes iqPulse {
+      0%  { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100%{ transform: scale(1); }
+    }
+    @keyframes iqShake {
+      0%,100%{ transform: translateX(0); }
+      25%    { transform: translateX(-4px); }
+      75%    { transform: translateX(4px); }
+    }
+    .ai-dot svg.iq-pulse { animation: iqPulse 220ms ease-out; }
+    .ai-dot svg.iq-shake { animation: iqShake 220ms ease-out; }
 
     /* --- BLACK SEPARATOR LINE --- */
     .separator-line {
@@ -819,8 +849,25 @@
       <!-- AI Performance Analyzer -->
       <div class="ai-analyzer">
         <div class="ai-badge tier-learner" id="ai-badge-tier">
-          <span class="ai-dot">🟢</span>
-          <span id="ai-tier-text">Quick Learner</span>
+          <span class="ai-dot">
+            <svg id="iq-brain-svg" class="iq-normal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="37" cy="47" rx="27" ry="31" fill="#f9a8d4" stroke="#9f1239" stroke-width="3.5"/>
+              <ellipse cx="63" cy="47" rx="27" ry="31" fill="#fda4af" stroke="#9f1239" stroke-width="3.5"/>
+              <line x1="50" y1="17" x2="50" y2="78" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M21 37 Q17 27 25 23 Q33 19 35 29" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round"/>
+              <path d="M17 52 Q11 43 19 39 Q27 35 29 45" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 66 Q16 58 22 53 Q30 48 32 58" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round"/>
+              <path d="M79 37 Q83 27 75 23 Q67 19 65 29" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round"/>
+              <path d="M83 52 Q89 43 81 39 Q73 35 71 45" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round"/>
+              <path d="M78 66 Q84 58 78 53 Q70 48 68 58" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round"/>
+              <rect x="44" y="77" width="12" height="9" rx="3" fill="#fda4af" stroke="#9f1239" stroke-width="2"/>
+            </svg>
+          </span>
+          <!-- Fixed label + live IQ value -->
+          <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
+            <span id="ai-tier-text" style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;opacity:0.6;line-height:1;">🧠 IQ Level</span>
+            <span id="ai-iq-value" style="font-size:13px;font-weight:800;line-height:1;">IQ: 10</span>
+          </span>
         </div>
         <div class="ai-energy-wrapper">
           <div class="ai-energy-bar" id="ai-energy-gauge"></div>
@@ -828,6 +875,7 @@
         <div class="ai-emoji" id="ai-emoji-face">😀</div>
       </div>
     </div>
+
 
     <!-- Separator -->
     <div class="separator-line"></div>
@@ -1439,8 +1487,8 @@
     // 8. AI PERFORMANCE ANALYZER
     // ==========================================
     const AIAnalyzer = {
-      energy: 50,
-      visualEnergy: 50,
+      energy: 0,
+      visualEnergy: 0,
       tierBadge: null,
       tierText: null,
       energyGauge: null,
@@ -1457,11 +1505,13 @@
       addEnergy(amount) {
         this.energy = Math.min(100, this.energy + amount);
         this.animateGauge();
+        this.triggerBrainPulse();
       },
 
       deductEnergy(amount) {
         this.energy = Math.max(0, this.energy - amount);
         this.animateGauge();
+        this.triggerBrainShake();
       },
 
       animateGauge() {
@@ -1485,22 +1535,59 @@
         // Skip normal updates if currently in Angry Mode
         if (GameEngine && GameEngine.isAngryMode) return;
 
+        // Map energy (0–100) to IQ display (10–180)
+        const iq = Math.round(10 + (this.visualEnergy / 100) * 170);
+
+        // Update live IQ number — title label stays fixed in HTML
+        const iqValueEl = document.getElementById("ai-iq-value");
+        if (iqValueEl) iqValueEl.innerText = `IQ: ${iq}`;
+
+        // Tier badge colour (unchanged logic)
         if (this.visualEnergy < 40) {
-          this.tierText.innerText = "Quick Learner";
           this.tierBadge.className = "ai-badge tier-learner";
-          this.tierBadge.querySelector(".ai-dot").innerText = "🟢";
-          this.emojiFace.innerText = "😕";
         } else if (this.visualEnergy < 78) {
-          this.tierText.innerText = "Puzzle Solver";
           this.tierBadge.className = "ai-badge tier-solver";
-          this.tierBadge.querySelector(".ai-dot").innerText = "🔵";
-          this.emojiFace.innerText = "😎";
         } else {
-          this.tierText.innerText = "Math Master";
           this.tierBadge.className = "ai-badge tier-master";
-          this.tierBadge.querySelector(".ai-dot").innerText = "🟣";
-          this.emojiFace.innerText = "🤩";
         }
+
+        // Level title (replaces emoji — text only, no emoji)
+        let levelTitle;
+        if (iq <= 40)       levelTitle = "Beginner";
+        else if (iq <= 80)  levelTitle = "Thinker";
+        else if (iq <= 120) levelTitle = "Solver";
+        else if (iq <= 150) levelTitle = "Strategist";
+        else                levelTitle = "Genius";
+        this.emojiFace.innerText = levelTitle;
+
+        // Brain glow state
+        const brain = document.getElementById("iq-brain-svg");
+        if (brain) {
+          brain.classList.remove("iq-normal", "iq-bright", "iq-blue", "iq-gold", "iq-electric");
+          if (iq <= 40)       brain.classList.add("iq-normal");
+          else if (iq <= 80)  brain.classList.add("iq-bright");
+          else if (iq <= 120) brain.classList.add("iq-blue");
+          else if (iq <= 150) brain.classList.add("iq-gold");
+          else                brain.classList.add("iq-electric");
+        }
+      },
+
+      triggerBrainPulse() {
+        const brain = document.getElementById("iq-brain-svg");
+        if (!brain) return;
+        brain.classList.remove("iq-pulse", "iq-shake");
+        void brain.offsetWidth;
+        brain.classList.add("iq-pulse");
+        setTimeout(() => brain.classList.remove("iq-pulse"), 220);
+      },
+
+      triggerBrainShake() {
+        const brain = document.getElementById("iq-brain-svg");
+        if (!brain) return;
+        brain.classList.remove("iq-pulse", "iq-shake");
+        void brain.offsetWidth;
+        brain.classList.add("iq-shake");
+        setTimeout(() => brain.classList.remove("iq-shake"), 220);
       }
     };
 
