@@ -227,24 +227,178 @@
       display: block;
       transition: filter 0.4s ease;
     }
-    .ai-dot svg.iq-normal  { filter: none; }
-    .ai-dot svg.iq-bright  { filter: brightness(1.25); }
-    .ai-dot svg.iq-blue    { filter: brightness(1.3) drop-shadow(0 0 4px rgba(59,130,246,0.7)); }
-    .ai-dot svg.iq-gold    { filter: brightness(1.4) drop-shadow(0 0 5px rgba(255,170,0,0.85)); }
-    .ai-dot svg.iq-electric{ filter: brightness(1.6) drop-shadow(0 0 7px rgba(168,85,247,0.9)) drop-shadow(0 0 12px rgba(255,170,0,0.5)); }
+
+    .ai-dot svg.iq-normal {
+      filter: none;
+    }
+
+    .ai-dot svg.iq-bright {
+      filter: brightness(1.25);
+    }
+
+    .ai-dot svg.iq-blue {
+      filter: brightness(1.3) drop-shadow(0 0 4px rgba(59, 130, 246, 0.7));
+    }
+
+    .ai-dot svg.iq-gold {
+      filter: brightness(1.4) drop-shadow(0 0 5px rgba(255, 170, 0, 0.85));
+    }
+
+    .ai-dot svg.iq-electric {
+      filter: brightness(1.6) drop-shadow(0 0 7px rgba(168, 85, 247, 0.9)) drop-shadow(0 0 12px rgba(255, 170, 0, 0.5));
+    }
 
     @keyframes iqPulse {
-      0%  { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100%{ transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.08);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
+
     @keyframes iqShake {
-      0%,100%{ transform: translateX(0); }
-      25%    { transform: translateX(-4px); }
-      75%    { transform: translateX(4px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-4px);
+      }
+
+      75% {
+        transform: translateX(4px);
+      }
     }
-    .ai-dot svg.iq-pulse { animation: iqPulse 220ms ease-out; }
-    .ai-dot svg.iq-shake { animation: iqShake 220ms ease-out; }
+
+    .ai-dot svg.iq-pulse {
+      animation: iqPulse 220ms ease-out;
+    }
+
+    .ai-dot svg.iq-shake {
+      animation: iqShake 220ms ease-out;
+    }
+
+    /* ==========================================
+       GAME FEEL ENGINE — CSS
+    ========================================== */
+
+    /* Cell pop on correct match */
+    @keyframes gfeCellPop {
+      0% {
+        transform: scale(1);
+      }
+
+      40% {
+        transform: scale(1.08);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .cell-pop {
+      animation: gfeCellPop 200ms ease-out;
+      will-change: transform;
+    }
+
+    /* Cell shake on wrong match */
+    @keyframes gfeCellShake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-4px);
+      }
+
+      55% {
+        transform: translateX(4px);
+      }
+
+      80% {
+        transform: translateX(-2px);
+      }
+    }
+
+    .cell-shake {
+      animation: gfeCellShake 260ms ease-out;
+      will-change: transform;
+    }
+
+    /* Combo badge popup */
+    .gfe-combo-badge {
+      position: absolute;
+      z-index: 60;
+      left: 50%;
+      top: 42%;
+      transform: translate(-50%, -50%) scale(0.8);
+      font-family: var(--font-family);
+      font-size: 17px;
+      font-weight: 800;
+      padding: 7px 20px;
+      border-radius: 50px;
+      border: 2px solid rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+      animation: gfeComboFade 950ms ease-out forwards;
+      will-change: opacity, transform;
+    }
+
+    @keyframes gfeComboFade {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7);
+      }
+
+      18% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+
+      55% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -62%) scale(0.95);
+      }
+    }
+
+    /* Lightweight CSS particles */
+    .gfe-particle {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      pointer-events: none;
+      will-change: transform, opacity;
+      animation: gfeParticleFly var(--gfe-dur, 580ms) ease-out forwards;
+    }
+
+    @keyframes gfeParticleFly {
+      0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(var(--gfe-tx, 0px), var(--gfe-ty, -30px)) scale(0.2);
+      }
+    }
 
     /* --- BLACK SEPARATOR LINE --- */
     .separator-line {
@@ -851,21 +1005,29 @@
         <div class="ai-badge tier-learner" id="ai-badge-tier">
           <span class="ai-dot">
             <svg id="iq-brain-svg" class="iq-normal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="37" cy="47" rx="27" ry="31" fill="#f9a8d4" stroke="#9f1239" stroke-width="3.5"/>
-              <ellipse cx="63" cy="47" rx="27" ry="31" fill="#fda4af" stroke="#9f1239" stroke-width="3.5"/>
-              <line x1="50" y1="17" x2="50" y2="78" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M21 37 Q17 27 25 23 Q33 19 35 29" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round"/>
-              <path d="M17 52 Q11 43 19 39 Q27 35 29 45" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round"/>
-              <path d="M22 66 Q16 58 22 53 Q30 48 32 58" fill="none" stroke="#9f1239" stroke-width="2" stroke-linecap="round"/>
-              <path d="M79 37 Q83 27 75 23 Q67 19 65 29" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round"/>
-              <path d="M83 52 Q89 43 81 39 Q73 35 71 45" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round"/>
-              <path d="M78 66 Q84 58 78 53 Q70 48 68 58" fill="none" stroke="#be123c" stroke-width="2" stroke-linecap="round"/>
-              <rect x="44" y="77" width="12" height="9" rx="3" fill="#fda4af" stroke="#9f1239" stroke-width="2"/>
+              <ellipse cx="37" cy="47" rx="27" ry="31" fill="#f9a8d4" stroke="#9f1239" stroke-width="3.5" />
+              <ellipse cx="63" cy="47" rx="27" ry="31" fill="#fda4af" stroke="#9f1239" stroke-width="3.5" />
+              <line x1="50" y1="17" x2="50" y2="78" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M21 37 Q17 27 25 23 Q33 19 35 29" fill="none" stroke="#9f1239" stroke-width="2"
+                stroke-linecap="round" />
+              <path d="M17 52 Q11 43 19 39 Q27 35 29 45" fill="none" stroke="#9f1239" stroke-width="2"
+                stroke-linecap="round" />
+              <path d="M22 66 Q16 58 22 53 Q30 48 32 58" fill="none" stroke="#9f1239" stroke-width="2"
+                stroke-linecap="round" />
+              <path d="M79 37 Q83 27 75 23 Q67 19 65 29" fill="none" stroke="#be123c" stroke-width="2"
+                stroke-linecap="round" />
+              <path d="M83 52 Q89 43 81 39 Q73 35 71 45" fill="none" stroke="#be123c" stroke-width="2"
+                stroke-linecap="round" />
+              <path d="M78 66 Q84 58 78 53 Q70 48 68 58" fill="none" stroke="#be123c" stroke-width="2"
+                stroke-linecap="round" />
+              <rect x="44" y="77" width="12" height="9" rx="3" fill="#fda4af" stroke="#9f1239" stroke-width="2" />
             </svg>
           </span>
           <!-- Fixed label + live IQ value -->
           <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
-            <span id="ai-tier-text" style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;opacity:0.6;line-height:1;">🧠 IQ Level</span>
+            <span id="ai-tier-text"
+              style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;opacity:0.6;line-height:1;">🧠
+              IQ Level</span>
             <span id="ai-iq-value" style="font-size:13px;font-weight:800;line-height:1;">IQ: 10</span>
           </span>
         </div>
@@ -1376,6 +1538,7 @@
 
         if (this.streak >= 2) {
           ComboSystem.show(this.streak);
+          GameFeelEngine.showComboFeedback(this.streak);
         }
 
         AnalyticsEngine.track("correct_match", {
@@ -1553,22 +1716,22 @@
 
         // Level title (replaces emoji — text only, no emoji)
         let levelTitle;
-        if (iq <= 40)       levelTitle = "Beginner";
-        else if (iq <= 80)  levelTitle = "Thinker";
+        if (iq <= 40) levelTitle = "Beginner";
+        else if (iq <= 80) levelTitle = "Thinker";
         else if (iq <= 120) levelTitle = "Solver";
         else if (iq <= 150) levelTitle = "Strategist";
-        else                levelTitle = "Genius";
+        else levelTitle = "Genius";
         this.emojiFace.innerText = levelTitle;
 
         // Brain glow state
         const brain = document.getElementById("iq-brain-svg");
         if (brain) {
           brain.classList.remove("iq-normal", "iq-bright", "iq-blue", "iq-gold", "iq-electric");
-          if (iq <= 40)       brain.classList.add("iq-normal");
-          else if (iq <= 80)  brain.classList.add("iq-bright");
+          if (iq <= 40) brain.classList.add("iq-normal");
+          else if (iq <= 80) brain.classList.add("iq-bright");
           else if (iq <= 120) brain.classList.add("iq-blue");
           else if (iq <= 150) brain.classList.add("iq-gold");
-          else                brain.classList.add("iq-electric");
+          else brain.classList.add("iq-electric");
         }
       },
 
@@ -1718,6 +1881,7 @@
                 ScoreEngine.registerMiss();
                 AIAnalyzer.deductEnergy(15);
                 this.triggerMismatchEffects(cellEl);
+                GameFeelEngine.showWrongFeedback(cellEl);
 
                 this.selectedStartCell.classList.remove("selected");
                 this.selectedStartCell = cellEl;
@@ -1843,6 +2007,9 @@
 
         elA.classList.remove("selected");
         elB.classList.remove("selected");
+
+        // Game Feel: cell pop on both matched cells
+        GameFeelEngine.showCorrectFeedback(elA, elB);
 
         const rectA = elA.getBoundingClientRect();
         const rectB = elB.getBoundingClientRect();
@@ -2402,6 +2569,88 @@
     };
 
     // ==========================================
+    // 12. GAME FEEL ENGINE
+    // ==========================================
+    const GameFeelEngine = {
+
+      init() {
+        // Stateless — all methods work on demand
+      },
+
+      // Correct match: pop both matched cells
+      showCorrectFeedback(elA, elB) {
+        [elA, elB].forEach(el => {
+          if (!el) return;
+          el.classList.remove("cell-pop");
+          void el.offsetWidth; // reflow to restart animation
+          el.classList.add("cell-pop");
+          setTimeout(() => el.classList.remove("cell-pop"), 220);
+        });
+      },
+
+      // Wrong match: shake the tapped cell
+      showWrongFeedback(cellEl) {
+        if (!cellEl) return;
+        cellEl.classList.remove("cell-shake");
+        void cellEl.offsetWidth;
+        cellEl.classList.add("cell-shake");
+        setTimeout(() => cellEl.classList.remove("cell-shake"), 280);
+      },
+
+      // Combo streak: show floating badge (2+ streak)
+      showComboFeedback(streak) {
+        if (streak < 2) return;
+        const appEl = document.getElementById("app-container");
+        if (!appEl) return;
+
+        let text, bg;
+        if (streak >= 5) { text = "Brilliant! \uD83C\uDFC6"; bg = "rgba(239,68,68,0.92)"; }
+        else if (streak >= 4) { text = "Awesome! \uD83E\uDD29"; bg = "rgba(168,85,247,0.92)"; }
+        else if (streak >= 3) { text = "Great! \uD83D\uDE0E"; bg = "rgba(59,130,246,0.92)"; }
+        else { text = "Nice! \uD83D\uDE0A"; bg = "rgba(16,185,129,0.92)"; }
+
+        const badge = document.createElement("div");
+        badge.className = "gfe-combo-badge";
+        badge.innerText = text;
+        badge.style.background = bg;
+        appEl.appendChild(badge);
+        setTimeout(() => badge.remove(), 1000);
+      },
+
+      // Floating score label — delegates to existing GameEngine method
+      showFloatingScore(text, x, y) {
+        GameEngine.spawnFloatingScore(text, x, y);
+      },
+
+      // Sound delegates — respect existing mute state via AudioEngine
+      playSuccessSound() { AudioEngine.playCorrect(); },
+      playErrorSound() { AudioEngine.playClick(); },
+
+      // CSS-only particle burst at (x, y) relative to app-container
+      spawnParticles(x, y) {
+        const appEl = document.getElementById("app-container");
+        if (!appEl) return;
+        const palette = ["#ffaa00", "#10b981", "#3b82f6", "#f472b6", "#a855f7", "#ef4444", "#fbbf24", "#34d399"];
+        const count = 8;
+        for (let i = 0; i < count; i++) {
+          const p = document.createElement("div");
+          p.className = "gfe-particle";
+          const angle = (360 / count) * i;
+          const dist = 24 + Math.random() * 22;
+          const rad = angle * Math.PI / 180;
+          const tx = Math.round(Math.cos(rad) * dist);
+          const ty = Math.round(Math.sin(rad) * dist);
+          const dur = 500 + Math.floor(Math.random() * 160);
+          p.style.cssText =
+            `left:${x}px;top:${y}px;background:${palette[i % palette.length]};` +
+            `--gfe-tx:${tx}px;--gfe-ty:${ty}px;--gfe-dur:${dur}ms;`;
+          appEl.appendChild(p);
+          setTimeout(() => p.remove(), dur + 60);
+        }
+      }
+    };
+
+    // ==========================================
     // 11. BOOTSTRAP INITIALIZATION
     // ==========================================
     window.addEventListener("DOMContentLoaded", () => {
@@ -2414,6 +2663,7 @@
       AIAnalyzer.init();
       GameEngine.init();
       CTAEngine.init();
+      GameFeelEngine.init();
 
       document.getElementById("mute-btn").addEventListener("click", () => {
         AudioEngine.toggleMute();
