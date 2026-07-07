@@ -220,10 +220,30 @@
       white-space: nowrap;
     }
 
+    /* Sprint 5 — IQ progress shimmer overlay */
+    .ai-energy-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+    .ai-energy-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -60%;
+      width: 40%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+      border-radius: 4px;
+      animation: energyShimmer 2.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes energyShimmer {
+      0%   { left: -60%; }
+      60%,100% { left: 130%; }
+    }
+
     /* --- IQ BRAIN ICON (inside .ai-dot) --- */
     .ai-dot svg {
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       display: block;
       transition: filter 0.4s ease;
     }
@@ -336,7 +356,7 @@
       will-change: transform;
     }
 
-    /* Combo badge popup */
+    /* Combo badge popup (Sprint 5 — dark translucent pill) */
     .gfe-combo-badge {
       position: absolute;
       z-index: 60;
@@ -346,13 +366,15 @@
       font-family: var(--font-family);
       font-size: 17px;
       font-weight: 800;
-      padding: 7px 20px;
+      color: #ffffff;
+      padding: 8px 22px;
       border-radius: 50px;
-      border: 2px solid rgba(0, 0, 0, 0.25);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 0 12px rgba(255,255,255,0.1) inset;
       pointer-events: none;
       animation: gfeComboFade 950ms ease-out forwards;
       will-change: opacity, transform;
+      backdrop-filter: blur(4px);
     }
 
     @keyframes gfeComboFade {
@@ -377,7 +399,7 @@
       }
     }
 
-    /* Lightweight CSS particles */
+    /* Lightweight CSS particles (Sprint 5 — soft glow) */
     .gfe-particle {
       position: absolute;
       width: 7px;
@@ -385,6 +407,7 @@
       border-radius: 50%;
       pointer-events: none;
       will-change: transform, opacity;
+      filter: drop-shadow(0 0 3px currentColor);
       animation: gfeParticleFly var(--gfe-dur, 580ms) ease-out forwards;
     }
 
@@ -516,37 +539,36 @@
       z-index: 1;
     }
 
-    /* --- FLOATING TEXT / XP FX --- */
+    /* --- FLOATING TEXT / XP FX (Sprint 5 — Premium Polish) --- */
     .floating-text {
       position: absolute;
       font-weight: 800;
-      font-size: 16px;
-      color: #000000;
+      font-size: 18px;
       pointer-events: none;
-      z-index: 15;
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-      animation: floatUp 1s cubic-bezier(0.25, 1, 0.50, 1) forwards;
+      z-index: 30;
+      /* Gold gradient text */
+      background: linear-gradient(135deg, #ffdd00 0%, #ffaa00 55%, #ff7700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      /* White outline via text-shadow trick on a wrapper pseudo — use filter instead */
+      filter: drop-shadow(0 0 4px rgba(255, 170, 0, 0.75)) drop-shadow(0 1px 2px rgba(0,0,0,0.35));
+      animation: floatUpPremium 650ms cubic-bezier(0.25, 1, 0.40, 1) forwards;
+      will-change: transform, opacity;
     }
 
     .floating-xp {
-      color: #10b981;
+      background: linear-gradient(135deg, #34d399, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.7));
     }
 
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(0.8);
-        opacity: 0;
-      }
-
-      20% {
-        transform: translateY(-20px) scale(1.2);
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(-70px) scale(1);
-        opacity: 0;
-      }
+    @keyframes floatUpPremium {
+      0%   { transform: translateY(0)   scale(0.8); opacity: 0; }
+      18%  { transform: translateY(-12px) scale(1.1); opacity: 1; }
+      100% { transform: translateY(-35px) scale(1);   opacity: 0; }
     }
 
     /* --- EMOTION OVERLAY ENGINE --- */
@@ -800,12 +822,29 @@
       font-weight: 800;
     }
 
-    /* --- CTA DOWNLOAD BUTTON --- */
+    /* Sprint 5 — End card sequential fade-in */
+    @keyframes s5FadeUp {
+      0%   { opacity: 0; transform: translateY(14px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    #cta-overlay.active .stat-box {
+      opacity: 0;
+      animation: s5FadeUp 0.4s ease-out forwards;
+    }
+    #cta-overlay.active .stat-box:nth-child(1) { animation-delay: 0.18s; }
+    #cta-overlay.active .stat-box:nth-child(2) { animation-delay: 0.26s; }
+    #cta-overlay.active .stat-box:nth-child(3) { animation-delay: 0.34s; }
+    #cta-overlay.active .stat-box:nth-child(4) { animation-delay: 0.42s; }
+    #cta-overlay.active .secondary-cta {
+      opacity: 0;
+      animation: s5FadeUp 0.4s ease-out 0.55s forwards;
+    }
+
+    /* --- CTA DOWNLOAD BUTTON (Sprint 5 — breathing glow + hover scale) --- */
     .cta-btn {
       position: relative;
       width: 100%;
       background: linear-gradient(135deg, #10b981, #059669);
-      /* emerald green */
       border: 2px solid #000000;
       color: #ffffff;
       padding: 16px 32px;
@@ -821,8 +860,18 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
-      transition: all 0.2s ease;
-      animation: ctaPulse 1.5s ease-in-out infinite alternate;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: ctaBreath 2s ease-in-out infinite;
+    }
+    @keyframes ctaBreath {
+      0%,100% { box-shadow: 0 5px 0 #000, 0 0 0 rgba(16,185,129,0); }
+      50%      { box-shadow: 0 5px 0 #000, 0 0 18px rgba(16,185,129,0.55); }
+    }
+    @media (hover: hover) {
+      .cta-btn:hover {
+        transform: scale(1.03);
+        box-shadow: 0 7px 0 #000, 0 0 22px rgba(16,185,129,0.5);
+      }
     }
 
     .cta-btn::before {
@@ -849,21 +898,6 @@
       100% {
         left: 150%;
       }
-    }
-
-    @keyframes ctaPulse {
-      0% {
-        transform: scale(1);
-      }
-
-      100% {
-        transform: scale(1.04);
-      }
-    }
-
-    .cta-btn:active {
-      transform: translateY(2px) scale(0.98);
-      box-shadow: 0 2px 0 #000000;
     }
 
     .cta-arrow {
