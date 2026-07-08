@@ -157,7 +157,7 @@
       align-items: center;
       gap: 12px;
       background: #ffffff;
-      padding: 6px 16px 6px 6px;
+      padding: 6px 12px;
       border-radius: 40px;
       border: 1.5px solid #000000;
       margin-top: 4px;
@@ -202,15 +202,16 @@
       background-color: #f1f5f9;
       background-image: url("data:image/svg+xml,%3Csvg width='24' height='8' viewBox='0 0 24 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2,4 L8,4 M12,4 L18,4 M18,4 L15,1 M18,4 L15,7' stroke='%23cbd5e1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
       background-repeat: repeat-x;
-      background-position: center;
+      background-position: left center;
       border-radius: 4px;
       overflow: hidden;
-      position: relative; /* Sprint 6: merged from duplicate Sprint 5 rule */
+      position: relative;
+      /* Sprint 6: merged from duplicate Sprint 5 rule */
     }
 
     .ai-energy-bar {
       height: 100%;
-      width: 50%;
+      width: 0%;
       background: linear-gradient(90deg, #10b981, #fbbf24, #f97316);
       border-radius: 4px;
       transition: width 0.3s ease;
@@ -224,24 +225,32 @@
       letter-spacing: 0.5px;
       transition: color 0.3s ease;
       white-space: nowrap;
-      margin-right: 6px;
     }
 
     /* Sprint 5 — IQ progress shimmer (Sprint 6: uses transform, not left, to avoid reflow) */
     .ai-energy-wrapper::after {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      width: 40%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+      top: 0;
+      left: 0;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
       border-radius: 4px;
       animation: energyShimmer 2.4s ease-in-out infinite;
       pointer-events: none;
       will-change: transform;
     }
+
     @keyframes energyShimmer {
-      0%       { transform: translateX(-200%); }
-      60%,100% { transform: translateX(350%); }
+      0% {
+        transform: translateX(-200%);
+      }
+
+      60%,
+      100% {
+        transform: translateX(350%);
+      }
     }
 
     /* --- IQ BRAIN ICON (inside .ai-dot) --- */
@@ -373,8 +382,8 @@
       color: #ffffff;
       padding: 8px 22px;
       border-radius: 50px;
-      border: 1.5px solid rgba(255,255,255,0.25);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 0 12px rgba(255,255,255,0.1) inset;
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 12px rgba(255, 255, 255, 0.1) inset;
       pointer-events: none;
       animation: gfeComboFade 950ms ease-out forwards;
       will-change: opacity, transform;
@@ -506,11 +515,10 @@
       transition: stroke 0.3s ease;
     }
 
-    /* --- GRID CELL BUTTON --- */
     .grid-cell {
       position: relative;
       background-color: #ffffff;
-      border: 0.34cqw solid var(--grid-border-color);
+      border: 1px solid var(--grid-border-color);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -525,6 +533,12 @@
       /* collapsing grid borders cleanly */
       transition: transform 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.15s ease, border-color 0.3s ease;
     }
+
+    /* Protect outer borders from sub-pixel negative margin clipping */
+    .grid-cell:nth-child(9n + 1) { margin-left: 0; }
+    .grid-cell:nth-child(9n) { margin-right: 0; }
+    .grid-cell:nth-child(-n + 9) { margin-top: 0; }
+    .grid-cell:nth-last-child(-n + 9) { margin-bottom: 0; }
 
     .grid-cell.selected {
       background-color: #fbe7ce;
@@ -550,6 +564,7 @@
       outline-offset: -2px;
       z-index: 11;
     }
+
     .cta-btn:focus-visible {
       outline: 3px solid #ffffff;
       outline-offset: 3px;
@@ -568,7 +583,7 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
       /* White outline via text-shadow trick on a wrapper pseudo — use filter instead */
-      filter: drop-shadow(0 0 4px rgba(255, 170, 0, 0.75)) drop-shadow(0 1px 2px rgba(0,0,0,0.35));
+      filter: drop-shadow(0 0 4px rgba(255, 170, 0, 0.75)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
       animation: floatUpPremium 650ms cubic-bezier(0.25, 1, 0.40, 1) forwards;
       will-change: transform, opacity;
     }
@@ -582,9 +597,20 @@
     }
 
     @keyframes floatUpPremium {
-      0%   { transform: translateY(0)   scale(0.8); opacity: 0; }
-      18%  { transform: translateY(-12px) scale(1.1); opacity: 1; }
-      100% { transform: translateY(-35px) scale(1);   opacity: 0; }
+      0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+      }
+
+      18% {
+        transform: translateY(-12px) scale(1.1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-35px) scale(1);
+        opacity: 0;
+      }
     }
 
     /* --- EMOTION OVERLAY ENGINE --- */
@@ -840,21 +866,43 @@
 
     /* Sprint 5 — End card sequential fade-in */
     @keyframes s5FadeUp {
-      0%   { opacity: 0; transform: translateY(14px); }
-      100% { opacity: 1; transform: translateY(0); }
+      0% {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     #cta-overlay.active .stat-box {
       opacity: 0;
       animation: s5FadeUp 0.4s ease-out forwards;
     }
-    #cta-overlay.active .stat-box:nth-child(1) { animation-delay: 0.18s; }
-    #cta-overlay.active .stat-box:nth-child(2) { animation-delay: 0.26s; }
-    #cta-overlay.active .stat-box:nth-child(3) { animation-delay: 0.34s; }
-    #cta-overlay.active .stat-box:nth-child(4) { animation-delay: 0.42s; }
+
+    #cta-overlay.active .stat-box:nth-child(1) {
+      animation-delay: 0.18s;
+    }
+
+    #cta-overlay.active .stat-box:nth-child(2) {
+      animation-delay: 0.26s;
+    }
+
+    #cta-overlay.active .stat-box:nth-child(3) {
+      animation-delay: 0.34s;
+    }
+
+    #cta-overlay.active .stat-box:nth-child(4) {
+      animation-delay: 0.42s;
+    }
+
     #cta-overlay.active .secondary-cta {
       opacity: 0;
       animation: s5FadeUp 0.4s ease-out 0.55s forwards;
     }
+
     #cta-overlay.active .cta-btn {
       opacity: 0;
       animation: s5FadeUp 0.4s ease-out 0.48s forwards;
@@ -883,14 +931,23 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       animation: ctaBreath 2s ease-in-out infinite;
     }
+
     @keyframes ctaBreath {
-      0%,100% { box-shadow: 0 5px 0 #000, 0 0 0 rgba(16,185,129,0); }
-      50%      { box-shadow: 0 5px 0 #000, 0 0 18px rgba(16,185,129,0.55); }
+
+      0%,
+      100% {
+        box-shadow: 0 5px 0 #000, 0 0 0 rgba(16, 185, 129, 0);
+      }
+
+      50% {
+        box-shadow: 0 5px 0 #000, 0 0 18px rgba(16, 185, 129, 0.55);
+      }
     }
+
     @media (hover: hover) {
       .cta-btn:hover {
         transform: scale(1.03);
-        box-shadow: 0 7px 0 #000, 0 0 22px rgba(16,185,129,0.5);
+        box-shadow: 0 7px 0 #000, 0 0 22px rgba(16, 185, 129, 0.5);
       }
     }
 
@@ -1073,19 +1130,27 @@
                 </filter>
               </defs>
               <g filter="url(#brain-shadow)">
-                <ellipse cx="38" cy="46" rx="26" ry="30" fill="url(#brain-grad-left)" stroke="#be123c" stroke-width="2.5" />
-                <ellipse cx="62" cy="46" rx="26" ry="30" fill="url(#brain-grad-right)" stroke="#be123c" stroke-width="2.5" />
+                <ellipse cx="38" cy="46" rx="26" ry="30" fill="url(#brain-grad-left)" stroke="#be123c"
+                  stroke-width="2.5" />
+                <ellipse cx="62" cy="46" rx="26" ry="30" fill="url(#brain-grad-right)" stroke="#be123c"
+                  stroke-width="2.5" />
                 <!-- Cerebellum -->
                 <ellipse cx="50" cy="78" rx="14" ry="10" fill="#f472b6" stroke="#9f1239" stroke-width="2" />
                 <rect x="45" y="75" width="10" height="12" rx="3" fill="#ec4899" stroke="#9f1239" stroke-width="2" />
                 <!-- Cortex folds (Left) -->
-                <path d="M22 36 Q18 28 26 24 Q32 20 34 28" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
-                <path d="M18 50 Q12 42 20 38 Q26 34 28 42" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
-                <path d="M24 64 Q18 56 24 52 Q30 48 32 56" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M22 36 Q18 28 26 24 Q32 20 34 28" fill="none" stroke="#be123c" stroke-width="2.5"
+                  stroke-linecap="round" />
+                <path d="M18 50 Q12 42 20 38 Q26 34 28 42" fill="none" stroke="#be123c" stroke-width="2.5"
+                  stroke-linecap="round" />
+                <path d="M24 64 Q18 56 24 52 Q30 48 32 56" fill="none" stroke="#be123c" stroke-width="2.5"
+                  stroke-linecap="round" />
                 <!-- Cortex folds (Right) -->
-                <path d="M78 36 Q82 28 74 24 Q68 20 66 28" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
-                <path d="M82 50 Q88 42 80 38 Q74 34 72 42" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
-                <path d="M76 64 Q82 56 76 52 Q70 48 68 56" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M78 36 Q82 28 74 24 Q68 20 66 28" fill="none" stroke="#be123c" stroke-width="2.5"
+                  stroke-linecap="round" />
+                <path d="M82 50 Q88 42 80 38 Q74 34 72 42" fill="none" stroke="#be123c" stroke-width="2.5"
+                  stroke-linecap="round" />
+                <path d="M76 64 Q82 56 76 52 Q70 48 68 56" fill="none" stroke="#be123c" stroke-width="2.5"
+                  stroke-linecap="round" />
                 <!-- Center split -->
                 <line x1="50" y1="18" x2="50" y2="76" stroke="#9f1239" stroke-width="3" stroke-linecap="round" />
               </g>
@@ -1093,7 +1158,8 @@
           </span>
           <!-- Fixed label + live IQ value -->
           <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
-            <span id="ai-tier-text" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;color:#10b981;display:flex;align-items:center;gap:4px;line-height:1;">
+            <span id="ai-tier-text"
+              style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;color:#10b981;display:flex;align-items:center;gap:4px;line-height:1;">
               <svg width="12" height="10" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="38" cy="46" rx="26" ry="30" fill="#f472b6" />
                 <ellipse cx="62" cy="46" rx="26" ry="30" fill="#ec4899" />
