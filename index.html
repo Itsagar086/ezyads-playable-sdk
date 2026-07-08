@@ -155,51 +155,54 @@
       width: 100%;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       background: #ffffff;
-      padding: 6px 12px;
-      border-radius: 10px;
+      padding: 6px 16px 6px 6px;
+      border-radius: 40px;
       border: 1.5px solid #000000;
       margin-top: 4px;
-      box-shadow: 0 3px 0 #000000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 3px 0 #000000;
       transition: all 0.3s ease;
     }
 
     .ai-badge {
       font-size: 11px;
       font-weight: 800;
-      padding: 4px 8px;
-      border-radius: 6px;
+      padding: 4px 12px 4px 6px;
+      border-radius: 30px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 8px;
       transition: all 0.3s ease;
     }
 
     .ai-badge.tier-learner {
-      background: rgba(16, 185, 129, 0.1);
-      border: 1px solid var(--accent-color);
-      color: #047857;
+      background: #ebfbf3;
+      border: 1px solid #34d399;
+      color: #065f46;
     }
 
     .ai-badge.tier-solver {
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid #3b82f6;
-      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+      color: #1e3a8a;
     }
 
     .ai-badge.tier-master {
-      background: rgba(168, 85, 247, 0.1);
-      border: 1px solid #a855f7;
-      color: #7e22ce;
+      background: #fdf4ff;
+      border: 1px solid #f0abfc;
+      color: #4a044e;
     }
 
     .ai-energy-wrapper {
       flex: 1;
       height: 8px;
-      background: #e2e8f0;
+      background-color: #f1f5f9;
+      background-image: url("data:image/svg+xml,%3Csvg width='24' height='8' viewBox='0 0 24 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2,4 L8,4 M12,4 L18,4 M18,4 L15,1 M18,4 L15,7' stroke='%23cbd5e1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");
+      background-repeat: repeat-x;
+      background-position: center;
       border-radius: 4px;
       overflow: hidden;
       position: relative; /* Sprint 6: merged from duplicate Sprint 5 rule */
@@ -208,18 +211,20 @@
     .ai-energy-bar {
       height: 100%;
       width: 50%;
-      background: linear-gradient(90deg, var(--accent-color), #ffaa00);
+      background: linear-gradient(90deg, #10b981, #fbbf24, #f97316);
       border-radius: 4px;
       transition: width 0.3s ease;
     }
 
     .ai-emoji {
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 800;
+      color: #000000;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
       transition: color 0.3s ease;
       white-space: nowrap;
+      margin-right: 6px;
     }
 
     /* Sprint 5 — IQ progress shimmer (Sprint 6: uses transform, not left, to avoid reflow) */
@@ -1054,30 +1059,48 @@
         <div class="ai-badge tier-learner" id="ai-badge-tier">
           <span class="ai-dot">
             <svg id="iq-brain-svg" class="iq-normal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="37" cy="47" rx="27" ry="31" fill="#f9a8d4" stroke="#9f1239" stroke-width="3.5" />
-              <ellipse cx="63" cy="47" rx="27" ry="31" fill="#fda4af" stroke="#9f1239" stroke-width="3.5" />
-              <line x1="50" y1="17" x2="50" y2="78" stroke="#9f1239" stroke-width="2.5" stroke-linecap="round" />
-              <path d="M21 37 Q17 27 25 23 Q33 19 35 29" fill="none" stroke="#9f1239" stroke-width="2"
-                stroke-linecap="round" />
-              <path d="M17 52 Q11 43 19 39 Q27 35 29 45" fill="none" stroke="#9f1239" stroke-width="2"
-                stroke-linecap="round" />
-              <path d="M22 66 Q16 58 22 53 Q30 48 32 58" fill="none" stroke="#9f1239" stroke-width="2"
-                stroke-linecap="round" />
-              <path d="M79 37 Q83 27 75 23 Q67 19 65 29" fill="none" stroke="#be123c" stroke-width="2"
-                stroke-linecap="round" />
-              <path d="M83 52 Q89 43 81 39 Q73 35 71 45" fill="none" stroke="#be123c" stroke-width="2"
-                stroke-linecap="round" />
-              <path d="M78 66 Q84 58 78 53 Q70 48 68 58" fill="none" stroke="#be123c" stroke-width="2"
-                stroke-linecap="round" />
-              <rect x="44" y="77" width="12" height="9" rx="3" fill="#fda4af" stroke="#9f1239" stroke-width="2" />
+              <defs>
+                <linearGradient id="brain-grad-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fbcfe8" />
+                  <stop offset="100%" stop-color="#f472b6" />
+                </linearGradient>
+                <linearGradient id="brain-grad-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f9a8d4" />
+                  <stop offset="100%" stop-color="#ec4899" />
+                </linearGradient>
+                <filter id="brain-shadow">
+                  <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#831843" flood-opacity="0.4" />
+                </filter>
+              </defs>
+              <g filter="url(#brain-shadow)">
+                <ellipse cx="38" cy="46" rx="26" ry="30" fill="url(#brain-grad-left)" stroke="#be123c" stroke-width="2.5" />
+                <ellipse cx="62" cy="46" rx="26" ry="30" fill="url(#brain-grad-right)" stroke="#be123c" stroke-width="2.5" />
+                <!-- Cerebellum -->
+                <ellipse cx="50" cy="78" rx="14" ry="10" fill="#f472b6" stroke="#9f1239" stroke-width="2" />
+                <rect x="45" y="75" width="10" height="12" rx="3" fill="#ec4899" stroke="#9f1239" stroke-width="2" />
+                <!-- Cortex folds (Left) -->
+                <path d="M22 36 Q18 28 26 24 Q32 20 34 28" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M18 50 Q12 42 20 38 Q26 34 28 42" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M24 64 Q18 56 24 52 Q30 48 32 56" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Cortex folds (Right) -->
+                <path d="M78 36 Q82 28 74 24 Q68 20 66 28" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M82 50 Q88 42 80 38 Q74 34 72 42" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M76 64 Q82 56 76 52 Q70 48 68 56" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Center split -->
+                <line x1="50" y1="18" x2="50" y2="76" stroke="#9f1239" stroke-width="3" stroke-linecap="round" />
+              </g>
             </svg>
           </span>
           <!-- Fixed label + live IQ value -->
-          <span style="display:flex;flex-direction:column;align-items:flex-start;gap:1px;">
-            <span id="ai-tier-text"
-              style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;opacity:0.6;line-height:1;">🧠
-              IQ Level</span>
-            <span id="ai-iq-value" style="font-size:13px;font-weight:800;line-height:1;">IQ: 10</span>
+          <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;">
+            <span id="ai-tier-text" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;color:#10b981;display:flex;align-items:center;gap:4px;line-height:1;">
+              <svg width="12" height="10" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="38" cy="46" rx="26" ry="30" fill="#f472b6" />
+                <ellipse cx="62" cy="46" rx="26" ry="30" fill="#ec4899" />
+              </svg>
+              IQ Level
+            </span>
+            <span id="ai-iq-value" style="font-size:16px;font-weight:800;line-height:1;color:#064e3b;">IQ: 10</span>
           </span>
         </div>
         <div class="ai-energy-wrapper">
